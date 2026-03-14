@@ -2,12 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Baby-Erstausstattung Checkliste — Juli 2026</title>
 <style>
-  @page {
-    size: A4;
-    margin: 12mm 14mm;
-  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -17,125 +14,97 @@
     line-height: 1.4;
   }
 
+  /* Auth overlay */
+  .auth-overlay {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999; flex-direction: column; gap: 20px;
+  }
+  .auth-overlay.hidden { display: none; }
+  .auth-box {
+    background: #fff; padding: 40px; border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    text-align: center; max-width: 400px;
+  }
+  .auth-box h2 { color: #c2185b; margin-bottom: 8px; }
+  .auth-box p { color: #888; margin-bottom: 20px; font-size: 10pt; }
+  .auth-box .baby-big { font-size: 48pt; margin-bottom: 10px; }
+  .btn-google {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 28px; background: #fff; border: 2px solid #ddd;
+    border-radius: 8px; font-size: 11pt; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .btn-google:hover { border-color: #c2185b; background: #fce4ec; }
+  .auth-error { color: #c62828; font-size: 9pt; margin-top: 10px; }
+
+  /* User bar */
+  .user-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 16px; background: #fce4ec; font-size: 9pt; color: #c2185b;
+  }
+  .user-bar .user-info { display: flex; align-items: center; gap: 8px; }
+  .user-bar img { width: 24px; height: 24px; border-radius: 50%; }
+  .btn-logout {
+    padding: 4px 12px; background: #fff; border: 1px solid #e8a0bf;
+    border-radius: 4px; font-size: 8pt; cursor: pointer; color: #c2185b; font-family: inherit;
+  }
+
   /* Header */
   .header {
-    text-align: center;
-    padding: 18px 0 10px;
-    border-bottom: 3px solid #e8a0bf;
-    margin-bottom: 14px;
+    text-align: center; padding: 18px 0 10px;
+    border-bottom: 3px solid #e8a0bf; margin-bottom: 14px;
   }
-  .header h1 {
-    font-size: 22pt;
-    color: #c2185b;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-  .header .subtitle {
-    font-size: 11pt;
-    color: #888;
-    margin-top: 4px;
-  }
-  .header .baby-icon {
-    font-size: 28pt;
-    margin-bottom: 4px;
-  }
+  .header h1 { font-size: 22pt; color: #c2185b; font-weight: 700; letter-spacing: 0.5px; }
+  .header .subtitle { font-size: 11pt; color: #888; margin-top: 4px; }
+  .header .baby-icon { font-size: 28pt; margin-bottom: 4px; }
   .header .info-row {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 10px;
-    font-size: 10pt;
-    color: #666;
-    flex-wrap: wrap;
+    display: flex; justify-content: center; gap: 30px;
+    margin-top: 10px; font-size: 10pt; color: #666; flex-wrap: wrap;
   }
   .header .info-row input {
-    border: none;
-    border-bottom: 1px dotted #aaa;
-    min-width: 140px;
-    padding: 2px 4px;
-    font-size: 10pt;
-    font-family: inherit;
-    background: #fafafa;
-    outline: none;
+    border: none; border-bottom: 1px dotted #aaa; min-width: 140px;
+    padding: 2px 4px; font-size: 10pt; font-family: inherit;
+    background: #fafafa; outline: none;
   }
-  .header .info-row input:focus {
-    border-bottom: 2px solid #c2185b;
-    background: #fff;
-  }
+  .header .info-row input:focus { border-bottom: 2px solid #c2185b; background: #fff; }
 
   /* Toolbar */
   .toolbar {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px 0;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
+    display: flex; justify-content: center; gap: 10px;
+    padding: 10px 0; margin-bottom: 10px; flex-wrap: wrap;
   }
   .toolbar button {
-    padding: 8px 18px;
-    border: none;
-    border-radius: 6px;
-    font-size: 10pt;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: transform 0.1s;
+    padding: 8px 18px; border: none; border-radius: 6px;
+    font-size: 10pt; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: transform 0.1s;
   }
   .toolbar button:active { transform: scale(0.97); }
-  .btn-save { background: #c2185b; color: #fff; }
-  .btn-save:hover { background: #a01550; }
   .btn-export { background: #1565c0; color: #fff; }
   .btn-export:hover { background: #0d47a1; }
-  .btn-import { background: #2e7d32; color: #fff; }
-  .btn-import:hover { background: #1b5e20; }
-  .btn-reset { background: #eee; color: #666; }
-  .btn-reset:hover { background: #ddd; }
-  .save-status {
-    font-size: 9pt;
-    color: #888;
-    align-self: center;
-  }
+  .save-status { font-size: 9pt; color: #888; align-self: center; }
+  .sync-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .sync-dot.online { background: #4caf50; }
+  .sync-dot.offline { background: #f44336; }
 
   /* Section */
-  .size-section {
-    margin-bottom: 12px;
-    page-break-inside: avoid;
-  }
+  .size-section { margin-bottom: 12px; page-break-inside: avoid; }
   .size-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 7px 12px;
-    border-radius: 6px;
-    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 12px; border-radius: 6px; margin-bottom: 4px;
   }
-  .size-header h2 {
-    font-size: 13pt;
-    font-weight: 700;
-    flex: 1;
-  }
-  .size-header .season {
-    font-size: 9pt;
-    font-weight: 400;
-    opacity: 0.8;
-  }
+  .size-header h2 { font-size: 13pt; font-weight: 700; flex: 1; }
+  .size-header .season { font-size: 9pt; font-weight: 400; opacity: 0.8; }
   .size-header .duration {
-    font-size: 8.5pt;
-    background: rgba(255,255,255,0.5);
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-weight: 600;
+    font-size: 8.5pt; background: rgba(255,255,255,0.5);
+    padding: 2px 8px; border-radius: 10px; font-weight: 600;
   }
   .progress-badge {
-    font-size: 8.5pt;
-    background: rgba(255,255,255,0.7);
-    padding: 2px 10px;
-    border-radius: 10px;
-    font-weight: 700;
+    font-size: 8.5pt; background: rgba(255,255,255,0.7);
+    padding: 2px 10px; border-radius: 10px; font-weight: 700;
   }
 
-  /* Season colors */
   .summer { background: #fff3e0; color: #e65100; }
   .summer-autumn { background: #fff8e1; color: #f57f17; }
   .autumn-winter { background: #e3f2fd; color: #1565c0; }
@@ -145,23 +114,11 @@
   .autumn-winter2 { background: #ede7f6; color: #4527a0; }
   .universal { background: #f3e5f5; color: #6a1b9a; }
 
-  /* Table */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 9.5pt;
-    margin-bottom: 2px;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 2px; }
   thead th {
-    background: #f5f5f5;
-    padding: 4px 6px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 8.5pt;
-    color: #555;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    border-bottom: 2px solid #ddd;
+    background: #f5f5f5; padding: 4px 6px; text-align: left;
+    font-weight: 600; font-size: 8.5pt; color: #555;
+    text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 2px solid #ddd;
   }
   thead th:nth-child(1) { width: 5%; text-align: center; }
   thead th:nth-child(2) { width: 32%; }
@@ -169,199 +126,98 @@
   thead th:nth-child(4) { width: 10%; text-align: center; }
   thead th:nth-child(5) { width: 10%; text-align: center; }
   thead th:nth-child(6) { width: 33%; }
-
-  tbody td {
-    padding: 4px 6px;
-    border-bottom: 1px solid #eee;
-    vertical-align: middle;
-  }
+  tbody td { padding: 4px 6px; border-bottom: 1px solid #eee; vertical-align: middle; }
   tbody td:nth-child(1) { text-align: center; }
-  tbody td:nth-child(3),
-  tbody td:nth-child(4),
-  tbody td:nth-child(5) { text-align: center; }
+  tbody td:nth-child(3), tbody td:nth-child(4), tbody td:nth-child(5) { text-align: center; }
 
-  /* Checked row */
-  tr.checked-row {
-    background: #f1f8e9;
-  }
-  tr.checked-row td:nth-child(2) {
-    text-decoration: line-through;
-    color: #999;
-  }
+  tr.checked-row { background: #f1f8e9; }
+  tr.checked-row td:nth-child(2) { text-decoration: line-through; color: #999; }
 
-  /* Checkbox */
-  input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    accent-color: #c2185b;
-  }
+  input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #c2185b; }
 
-  /* Editable inputs */
   .edit-field {
-    border: none;
-    border-bottom: 1px dotted #ccc;
-    width: 100%;
-    padding: 2px 4px;
-    font-size: 9pt;
-    font-family: inherit;
-    background: transparent;
-    outline: none;
+    border: none; border-bottom: 1px dotted #ccc; width: 100%;
+    padding: 2px 4px; font-size: 9pt; font-family: inherit;
+    background: transparent; outline: none;
   }
-  .edit-field:focus {
-    border-bottom: 2px solid #c2185b;
-    background: #fff8f0;
-  }
-  .edit-small {
-    width: 50px;
-    text-align: center;
-  }
+  .edit-field:focus { border-bottom: 2px solid #c2185b; background: #fff8f0; }
+  .edit-small { width: 50px; text-align: center; }
 
-  /* Status badges */
-  .badge-ok {
-    background: #e8f5e9;
-    color: #2e7d32;
-    padding: 1px 6px;
-    border-radius: 8px;
-    font-size: 8pt;
-    font-weight: 600;
-  }
-  .badge-need {
-    background: #fce4ec;
-    color: #c62828;
-    padding: 1px 6px;
-    border-radius: 8px;
-    font-size: 8pt;
-    font-weight: 600;
-  }
-  .badge-extra {
-    background: #fff3e0;
-    color: #e65100;
-    padding: 1px 6px;
-    border-radius: 8px;
-    font-size: 8pt;
-    font-weight: 600;
-  }
+  .badge-ok { background: #e8f5e9; color: #2e7d32; padding: 1px 6px; border-radius: 8px; font-size: 8pt; font-weight: 600; }
+  .badge-need { background: #fce4ec; color: #c62828; padding: 1px 6px; border-radius: 8px; font-size: 8pt; font-weight: 600; }
+  .badge-extra { background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 8px; font-size: 8pt; font-weight: 600; }
 
-  /* Priority box */
-  .priority-section {
-    margin-top: 16px;
-    page-break-inside: avoid;
-  }
-  .priority-box {
-    border: 2px solid #e8a0bf;
-    border-radius: 8px;
-    padding: 12px 16px;
-  }
-  .priority-box h3 {
-    color: #c2185b;
-    font-size: 12pt;
-    margin-bottom: 8px;
-  }
-  .priority-table td {
-    padding: 4px 8px;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 9.5pt;
-  }
-  .priority-table td:first-child {
-    font-weight: 700;
-    white-space: nowrap;
-  }
+  .priority-section { margin-top: 16px; page-break-inside: avoid; }
+  .priority-box { border: 2px solid #e8a0bf; border-radius: 8px; padding: 12px 16px; }
+  .priority-box h3 { color: #c2185b; font-size: 12pt; margin-bottom: 8px; }
+  .priority-table td { padding: 4px 8px; border-bottom: 1px solid #f0f0f0; font-size: 9.5pt; }
+  .priority-table td:first-child { font-weight: 700; white-space: nowrap; }
 
-  /* Notes section */
-  .notes-section {
-    margin-top: 14px;
-    page-break-inside: avoid;
-  }
-  .notes-section h3 {
-    color: #c2185b;
-    font-size: 11pt;
-    margin-bottom: 8px;
-    padding-bottom: 3px;
-    border-bottom: 2px solid #fce4ec;
-  }
+  .notes-section { margin-top: 14px; page-break-inside: avoid; }
+  .notes-section h3 { color: #c2185b; font-size: 11pt; margin-bottom: 8px; padding-bottom: 3px; border-bottom: 2px solid #fce4ec; }
   .notes-area {
-    width: 100%;
-    min-height: 120px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 10px;
-    font-family: inherit;
-    font-size: 10pt;
-    resize: vertical;
-    outline: none;
+    width: 100%; min-height: 120px; border: 1px solid #ddd;
+    border-radius: 6px; padding: 10px; font-family: inherit;
+    font-size: 10pt; resize: vertical; outline: none;
   }
-  .notes-area:focus {
-    border-color: #c2185b;
-  }
+  .notes-area:focus { border-color: #c2185b; }
 
-  /* Tip box */
   .tip-box {
-    background: #fffde7;
-    border-left: 4px solid #fbc02d;
-    padding: 8px 12px;
-    margin: 10px 0;
-    font-size: 9pt;
-    border-radius: 0 6px 6px 0;
-    page-break-inside: avoid;
+    background: #fffde7; border-left: 4px solid #fbc02d;
+    padding: 8px 12px; margin: 10px 0; font-size: 9pt;
+    border-radius: 0 6px 6px 0; page-break-inside: avoid;
   }
   .tip-box strong { color: #f57f17; }
 
-  /* Page break helpers */
   .page-break { page-break-before: always; }
+  .footer { text-align: center; font-size: 8pt; color: #bbb; padding-top: 10px; border-top: 1px solid #eee; margin-top: 14px; }
 
-  /* Footer */
-  .footer {
-    text-align: center;
-    font-size: 8pt;
-    color: #bbb;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
-    margin-top: 14px;
-  }
+  .total-progress { text-align: center; margin-bottom: 12px; padding: 10px; background: #fce4ec; border-radius: 8px; }
+  .total-progress .bar-wrap { background: #f5f5f5; border-radius: 10px; height: 20px; margin: 6px auto; max-width: 500px; overflow: hidden; }
+  .total-progress .bar-fill { height: 100%; background: linear-gradient(90deg, #e91e63, #c2185b); border-radius: 10px; transition: width 0.4s ease; }
+  .total-progress .bar-text { font-size: 11pt; font-weight: 700; color: #c2185b; }
 
-  /* Hidden file input */
-  #importFile { display: none; }
-
-  /* Total progress */
-  .total-progress {
-    text-align: center;
-    margin-bottom: 12px;
-    padding: 10px;
-    background: #fce4ec;
-    border-radius: 8px;
-  }
-  .total-progress .bar-wrap {
-    background: #f5f5f5;
-    border-radius: 10px;
-    height: 20px;
-    margin: 6px auto;
-    max-width: 500px;
-    overflow: hidden;
-  }
-  .total-progress .bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #e91e63, #c2185b);
-    border-radius: 10px;
-    transition: width 0.4s ease;
-  }
-  .total-progress .bar-text {
-    font-size: 11pt;
-    font-weight: 700;
-    color: #c2185b;
-  }
+  .last-updated { text-align: center; font-size: 8pt; color: #aaa; margin-bottom: 8px; }
 
   @media print {
     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .no-print { display: none; }
-    .toolbar { display: none; }
-    .total-progress { display: none; }
+    .no-print, .toolbar, .total-progress, .user-bar, .auth-overlay { display: none !important; }
+  }
+  @media (max-width: 600px) {
+    .header h1 { font-size: 16pt; }
+    .header .info-row { flex-direction: column; gap: 8px; align-items: center; }
+    thead th:nth-child(3), thead th:nth-child(4), tbody td:nth-child(3), tbody td:nth-child(4) { display: none; }
   }
 </style>
 </head>
 <body>
 
-<!-- ==================== HEADER ==================== -->
+<!-- AUTH OVERLAY -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <div class="baby-big">&#x1F476;</div>
+    <h2>Baby-Checkliste</h2>
+    <p>Melde dich an um die Checkliste zu bearbeiten</p>
+    <button class="btn-google" onclick="signIn()">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#34A853" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#FBBC05" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Mit Google anmelden
+    </button>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
+
+<!-- USER BAR -->
+<div class="user-bar no-print" id="userBar" style="display:none">
+  <div class="user-info">
+    <img id="userPhoto" src="" alt="">
+    <span id="userName"></span>
+    <span>&bull;</span>
+    <span><span class="sync-dot online" id="syncDot"></span><span id="syncText">Live</span></span>
+  </div>
+  <button class="btn-logout" onclick="signOut()">Abmelden</button>
+</div>
+
+<!-- HEADER -->
 <div class="header">
   <div class="baby-icon">&#x1F476;</div>
   <h1>Baby-Erstausstattung Checkliste</h1>
@@ -375,13 +231,11 @@
 
 <!-- TOOLBAR -->
 <div class="toolbar no-print">
-  <button class="btn-save" onclick="saveData()">Speichern</button>
   <button class="btn-export" onclick="exportData()">Backup herunterladen</button>
-  <button class="btn-import" onclick="document.getElementById('importFile').click()">Backup laden</button>
-  <button class="btn-reset" onclick="resetData()">Alles zurücksetzen</button>
-  <input type="file" id="importFile" accept=".json" onchange="importData(event)">
   <span class="save-status" id="saveStatus"></span>
 </div>
+
+<div class="last-updated" id="lastUpdated"></div>
 
 <!-- TOTAL PROGRESS -->
 <div class="total-progress no-print">
@@ -397,20 +251,16 @@
     <span class="duration">~4 Wochen</span>
     <span class="progress-badge" data-progress="gr56">0/0</span>
   </div>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="gr56-0"></td><td>Wickelbodys kurzarm</td><td>0</td><td><span class="badge-need">5</span></td><td><input class="edit-field edit-small" data-id="gr56-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-0-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr56-1"></td><td>Wickelbodys langarm</td><td>0</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr56-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-1-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr56-2"></td><td>Strampler dünn</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr56-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-2-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr56-3"></td><td>Hosen dünn</td><td>0</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr56-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-3-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr56-4"></td><td>Söckchen dünn</td><td>0</td><td><span class="badge-need">3 Paar</span></td><td><input class="edit-field edit-small" data-id="gr56-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-4-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr56-5"></td><td>Mützchen dünn / Sonnenschutz</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr56-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-5-note" placeholder="..."></td></tr>
-    </tbody>
-  </table>
-  <div class="tip-box"><strong>Tipp:</strong> Gr. 56 wird nur ~4 Wochen getragen — Second-Hand ideal! Viele Babys passen bei Geburt schon in 56.</div>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="gr56-0"></td><td>Wickelbodys kurzarm</td><td>0</td><td><span class="badge-need">5</span></td><td><input class="edit-field edit-small" data-id="gr56-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-0-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr56-1"></td><td>Wickelbodys langarm</td><td>0</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr56-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-1-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr56-2"></td><td>Strampler dünn</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr56-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-2-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr56-3"></td><td>Hosen dünn</td><td>0</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr56-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-3-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr56-4"></td><td>Söckchen dünn</td><td>0</td><td><span class="badge-need">3 Paar</span></td><td><input class="edit-field edit-small" data-id="gr56-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-4-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr56-5"></td><td>Mützchen dünn / Sonnenschutz</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr56-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-5-note" placeholder="..."></td></tr>
+  </tbody></table>
+  <div class="tip-box"><strong>Tipp:</strong> Gr. 56 wird nur ~4 Wochen getragen — Second-Hand ideal!</div>
 </div>
 
 <!-- GR. 62 -->
@@ -421,24 +271,20 @@
     <span class="duration">~6 Wochen</span>
     <span class="progress-badge" data-progress="gr62">0/0</span>
   </div>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="gr62-0"></td><td>Bodys kurzarm</td><td><span class="badge-ok">5 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr62-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-0-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-1"></td><td>Bodys langarm</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr62-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-1-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-2"></td><td>Strampler dünn</td><td>1</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr62-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-2-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-3"></td><td>Strampler dick</td><td><span class="badge-ok">2 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr62-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-3-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-4"></td><td>Hosen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr62-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-4-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-5"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr62-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-5-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-6"></td><td>Pullover dünn</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr62-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-6-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-7"></td><td>Jäckchen dünn</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr62-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-7-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-8"></td><td>Söckchen</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr62-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-8-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-9"></td><td>Strumpfhosen dünn</td><td>0</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr62-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-9-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr62-10"></td><td>Mützchen</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr62-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-10-note" placeholder="..."></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="gr62-0"></td><td>Bodys kurzarm</td><td><span class="badge-ok">5 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr62-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-0-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-1"></td><td>Bodys langarm</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr62-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-1-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-2"></td><td>Strampler dünn</td><td>1</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr62-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-2-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-3"></td><td>Strampler dick</td><td><span class="badge-ok">2 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr62-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-3-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-4"></td><td>Hosen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr62-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-4-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-5"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr62-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-5-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-6"></td><td>Pullover dünn</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr62-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-6-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-7"></td><td>Jäckchen dünn</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr62-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-7-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-8"></td><td>Söckchen</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr62-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-8-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-9"></td><td>Strumpfhosen dünn</td><td>0</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr62-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-9-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr62-10"></td><td>Mützchen</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr62-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-10-note" placeholder="..."></td></tr>
+  </tbody></table>
 </div>
 
 <!-- GR. 68 -->
@@ -449,24 +295,20 @@
     <span class="duration">~8 Wochen</span>
     <span class="progress-badge" data-progress="gr68">0/0</span>
   </div>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="gr68-0"></td><td>Bodys kurzarm</td><td><span class="badge-ok">3 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr68-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-0-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-1"></td><td>Bodys langarm</td><td>0</td><td><span class="badge-need">6</span></td><td><input class="edit-field edit-small" data-id="gr68-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-1-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-2"></td><td>Strampler dick</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-2-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-3"></td><td>Schlafanzüge</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-3-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-4"></td><td>Hosen dick</td><td>1</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr68-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-4-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-5"></td><td>Pullover / Jäckchen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-5-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-6"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr68-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-6-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-7"></td><td>Strumpfhosen dick</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-7-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-8"></td><td>Söckchen dick</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr68-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-8-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-9"></td><td>Strickmütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr68-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-9-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr68-10"></td><td>Handschuhe (ohne Daumen)</td><td>0</td><td><span class="badge-need">1 Paar</span></td><td><input class="edit-field edit-small" data-id="gr68-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-10-note" placeholder="..."></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="gr68-0"></td><td>Bodys kurzarm</td><td><span class="badge-ok">3 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr68-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-0-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-1"></td><td>Bodys langarm</td><td>0</td><td><span class="badge-need">6</span></td><td><input class="edit-field edit-small" data-id="gr68-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-1-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-2"></td><td>Strampler dick</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-2-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-3"></td><td>Schlafanzüge</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-3-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-4"></td><td>Hosen dick</td><td>1</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr68-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-4-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-5"></td><td>Pullover / Jäckchen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-5-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-6"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr68-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-6-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-7"></td><td>Strumpfhosen dick</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr68-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-7-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-8"></td><td>Söckchen dick</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr68-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-8-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-9"></td><td>Strickmütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr68-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-9-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr68-10"></td><td>Handschuhe (ohne Daumen)</td><td>0</td><td><span class="badge-need">1 Paar</span></td><td><input class="edit-field edit-small" data-id="gr68-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-10-note" placeholder="..."></td></tr>
+  </tbody></table>
 </div>
 
 <div class="page-break"></div>
@@ -479,24 +321,20 @@
     <span class="duration">~10 Wochen</span>
     <span class="progress-badge" data-progress="gr74">0/0</span>
   </div>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="gr74-0"></td><td>Bodys kurzarm</td><td><span class="badge-extra">6 (4 extra)</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr74-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-0-note" value="Als Unterwäsche unter Pulli nutzbar"></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-1"></td><td>Bodys langarm</td><td>2</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr74-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-1-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-2"></td><td>Strampler dick</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr74-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-2-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-3"></td><td>Schlafanzüge</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr74-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-3-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-4"></td><td>Hosen dick</td><td>3</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr74-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-4-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-5"></td><td>Hosen dünn</td><td><span class="badge-extra">3</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr74-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-5-note" value="Für drinnen / Übergang ok"></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-6"></td><td>Pullover</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr74-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-6-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-7"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr74-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-7-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-8"></td><td>Strumpfhosen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr74-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-8-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-9"></td><td>Söckchen dick</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr74-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-9-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr74-10"></td><td>Wintermütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr74-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-10-note" placeholder="..."></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="gr74-0"></td><td>Bodys kurzarm</td><td><span class="badge-extra">6 (4 extra)</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr74-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-0-note" value="Als Unterwäsche unter Pulli nutzbar"></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-1"></td><td>Bodys langarm</td><td>2</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr74-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-1-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-2"></td><td>Strampler dick</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr74-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-2-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-3"></td><td>Schlafanzüge</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr74-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-3-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-4"></td><td>Hosen dick</td><td>3</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr74-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-4-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-5"></td><td>Hosen dünn</td><td><span class="badge-extra">3</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr74-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-5-note" value="Für drinnen / Übergang ok"></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-6"></td><td>Pullover</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr74-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-6-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-7"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr74-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-7-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-8"></td><td>Strumpfhosen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr74-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-8-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-9"></td><td>Söckchen dick</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr74-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-9-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr74-10"></td><td>Wintermütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr74-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-10-note" placeholder="..."></td></tr>
+  </tbody></table>
 </div>
 
 <!-- GR. 80 -->
@@ -507,23 +345,19 @@
     <span class="duration">~12 Wochen</span>
     <span class="progress-badge" data-progress="gr80">0/0</span>
   </div>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="gr80-0"></td><td>Bodys langarm</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr80-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-0-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-1"></td><td>Bodys kurzarm</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr80-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-1-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-2"></td><td>Strampler</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr80-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-2-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-3"></td><td>Hosen dünn</td><td>2</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr80-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-3-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-4"></td><td>Shirts lang + kurz</td><td>0</td><td><span class="badge-need">5</span></td><td><input class="edit-field edit-small" data-id="gr80-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-4-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-5"></td><td>Pullover dünn</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr80-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-5-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-6"></td><td>Pullover dick</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr80-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-6-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-7"></td><td>Jäckchen / Übergangsjacke</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr80-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-7-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-8"></td><td>Söckchen</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr80-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-8-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr80-9"></td><td>Sonnenhut</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr80-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-9-note" placeholder="..."></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="gr80-0"></td><td>Bodys langarm</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr80-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-0-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-1"></td><td>Bodys kurzarm</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr80-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-1-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-2"></td><td>Strampler</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr80-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-2-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-3"></td><td>Hosen dünn</td><td>2</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr80-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-3-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-4"></td><td>Shirts lang + kurz</td><td>0</td><td><span class="badge-need">5</span></td><td><input class="edit-field edit-small" data-id="gr80-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-4-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-5"></td><td>Pullover dünn</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr80-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-5-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-6"></td><td>Pullover dick</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr80-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-6-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-7"></td><td>Jäckchen / Übergangsjacke</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr80-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-7-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-8"></td><td>Söckchen</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr80-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-8-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr80-9"></td><td>Sonnenhut</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr80-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-9-note" placeholder="..."></td></tr>
+  </tbody></table>
 </div>
 
 <!-- GR. 86 -->
@@ -534,20 +368,16 @@
     <span class="duration">~14 Wochen</span>
     <span class="progress-badge" data-progress="gr86">0/0</span>
   </div>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="gr86-0"></td><td>Bodys kurzarm</td><td>1</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr86-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-0-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr86-1"></td><td>Bodys langarm</td><td><span class="badge-ok">3 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr86-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-1-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr86-2"></td><td>Hosen dünn / Shorts</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr86-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-2-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr86-3"></td><td>T-Shirts</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr86-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-3-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr86-4"></td><td>Strampler / kurze Einteiler</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr86-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-4-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr86-5"></td><td>Söckchen dünn</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr86-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-5-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr86-6"></td><td>Sonnenhut UV</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr86-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-6-note" placeholder="..."></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="gr86-0"></td><td>Bodys kurzarm</td><td>1</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr86-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-0-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr86-1"></td><td>Bodys langarm</td><td><span class="badge-ok">3 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr86-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-1-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr86-2"></td><td>Hosen dünn / Shorts</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr86-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-2-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr86-3"></td><td>T-Shirts</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr86-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-3-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr86-4"></td><td>Strampler / kurze Einteiler</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr86-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-4-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr86-5"></td><td>Söckchen dünn</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr86-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-5-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr86-6"></td><td>Sonnenhut UV</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr86-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-6-note" placeholder="..."></td></tr>
+  </tbody></table>
 </div>
 
 <!-- GR. 92 -->
@@ -558,23 +388,19 @@
     <span class="duration">~16 Wochen</span>
     <span class="progress-badge" data-progress="gr92">0/0</span>
   </div>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen / Wo gekauft / Preis</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="gr92-0"></td><td>Bodys langarm</td><td>1</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr92-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-0-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-1"></td><td>Bodys kurzarm</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr92-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-1-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-2"></td><td>Hosen dick</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr92-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-2-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-3"></td><td>Pullover dick</td><td>1</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr92-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-3-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-4"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr92-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-4-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-5"></td><td>Schlafanzüge</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr92-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-5-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-6"></td><td>Strumpfhosen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr92-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-6-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-7"></td><td>Söckchen dick</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr92-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-7-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-8"></td><td>Winterjacke</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr92-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-8-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="gr92-9"></td><td>Wintermütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr92-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-9-note" placeholder="..."></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="gr92-0"></td><td>Bodys langarm</td><td>1</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr92-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-0-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-1"></td><td>Bodys kurzarm</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="gr92-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-1-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-2"></td><td>Hosen dick</td><td>1</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr92-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-2-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-3"></td><td>Pullover dick</td><td>1</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr92-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-3-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-4"></td><td>Langarmshirts</td><td>0</td><td><span class="badge-need">4</span></td><td><input class="edit-field edit-small" data-id="gr92-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-4-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-5"></td><td>Schlafanzüge</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr92-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-5-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-6"></td><td>Strumpfhosen</td><td>0</td><td><span class="badge-need">3</span></td><td><input class="edit-field edit-small" data-id="gr92-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-6-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-7"></td><td>Söckchen dick</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr92-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-7-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-8"></td><td>Winterjacke</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr92-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-8-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="gr92-9"></td><td>Wintermütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr92-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-9-note" placeholder="..."></td></tr>
+  </tbody></table>
 </div>
 
 <div class="page-break"></div>
@@ -587,56 +413,40 @@
   </div>
 
   <h3 style="font-size:10.5pt; color:#6a1b9a; margin:10px 0 4px 4px;">Schlafsäcke</h3>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Schlafsack</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Abdeckt Größen / Zeitraum</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="uni-0"></td><td>Gr. 70 dünn (TOG 0,5–1)</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="uni-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-0-note" value="Gr. 56–68 / Juli – Okt"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-1"></td><td>Gr. 70 dick (TOG 2,5)</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="uni-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-1-note" value="Gr. 62–68 / Okt – Dez"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-2"></td><td>Gr. 90 dick (TOG 2,5)</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-2-note" value="Gr. 74–80 / Dez – März"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-3"></td><td>Gr. 90 dünn (TOG 1)</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-3-note" value="Gr. 80–86 / März – Okt"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-4"></td><td>Gr. 110 dick (TOG 2,5)</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-4-note" value="Gr. 86–92 / Okt – Feb"></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Schlafsack</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Größen / Zeitraum</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="uni-0"></td><td>Gr. 70 dünn (TOG 0,5–1)</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="uni-0-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-0-note" value="Gr. 56–68 / Juli – Okt"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-1"></td><td>Gr. 70 dick (TOG 2,5)</td><td><span class="badge-ok">1 &#x2713;</span></td><td>—</td><td><input class="edit-field edit-small" data-id="uni-1-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-1-note" value="Gr. 62–68 / Okt – Dez"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-2"></td><td>Gr. 90 dick (TOG 2,5)</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-2-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-2-note" value="Gr. 74–80 / Dez – März"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-3"></td><td>Gr. 90 dünn (TOG 1)</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-3-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-3-note" value="Gr. 80–86 / März – Okt"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-4"></td><td>Gr. 110 dick (TOG 2,5)</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-4-note" value="Gr. 86–92 / Okt – Feb"></td></tr>
+  </tbody></table>
 
   <h3 style="font-size:10.5pt; color:#6a1b9a; margin:14px 0 4px 4px;">Outdoor / Overalls</h3>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Zeitraum</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="uni-5"></td><td>Wollfleece-Overall Gr. 68</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-5-note" value="Okt – Dez"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-6"></td><td>Winteroverall Gr. 74/80</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-6-note" value="Dez – März"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-7"></td><td>Übergangsjacke Gr. 80</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-7-note" value="März – Juni"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-8"></td><td>Winterjacke Gr. 86/92</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-8-note" value="Okt – Feb (2. Winter)"></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Zeitraum</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="uni-5"></td><td>Wollfleece-Overall Gr. 68</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-5-note" value="Okt – Dez"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-6"></td><td>Winteroverall Gr. 74/80</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-6-note" value="Dez – März"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-7"></td><td>Übergangsjacke Gr. 80</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-7-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-7-note" value="März – Juni"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-8"></td><td>Winterjacke Gr. 86/92</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-8-note" value="Okt – Feb (2. Winter)"></td></tr>
+  </tbody></table>
 
   <h3 style="font-size:10.5pt; color:#6a1b9a; margin:14px 0 4px 4px;">&#x1F3CA; Schwimmsachen</h3>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Wann / Wofür</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="uni-9"></td><td>Schwimmwindel Gr. 68–74</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-9-note" value="Ab ~3 Mon. / Babyschwimmen"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-10"></td><td>Schwimmwindel Gr. 80–86</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-10-note" value="Sommer 2027 / Freibad"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-11"></td><td>UV-Schwimmanzug Gr. 80/86</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-11-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-11-note" value="Sommer 2027 / UV-Schutz 50+"></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-12"></td><td>Badeponcho / Badehandtuch</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-12-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-12-note" value="Ab Babyschwimmen, Einheitsgröße"></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Kleidungsstück</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Wann / Wofür</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="uni-9"></td><td>Schwimmwindel Gr. 68–74</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-9-note" value="Ab ~3 Mon. / Babyschwimmen"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-10"></td><td>Schwimmwindel Gr. 80–86</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-10-note" value="Sommer 2027 / Freibad"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-11"></td><td>UV-Schwimmanzug Gr. 80/86</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-11-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-11-note" value="Sommer 2027 / UV-Schutz 50+"></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-12"></td><td>Badeponcho / Badehandtuch</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="uni-12-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-12-note" value="Ab Babyschwimmen, Einheitsgröße"></td></tr>
+  </tbody></table>
 
   <h3 style="font-size:10.5pt; color:#6a1b9a; margin:14px 0 4px 4px;">Basics (alle Größen)</h3>
-  <table>
-    <thead><tr>
-      <th>&#x2714;</th><th>Artikel</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th>
-    </tr></thead>
-    <tbody>
-      <tr><td><input type="checkbox" data-id="uni-13"></td><td>Spucktücher / Mullwindeln</td><td>?</td><td><span class="badge-need">15 Stk</span></td><td><input class="edit-field edit-small" data-id="uni-13-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-13-note" value="Man hat nie genug! Allrounder."></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-14"></td><td>Halstücher / Dreieckstücher</td><td>?</td><td><span class="badge-need">4 Stk</span></td><td><input class="edit-field edit-small" data-id="uni-14-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-14-note" placeholder="..."></td></tr>
-      <tr><td><input type="checkbox" data-id="uni-15"></td><td>Kratzfäustlinge</td><td>?</td><td><span class="badge-need">1 Paar</span></td><td><input class="edit-field edit-small" data-id="uni-15-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-15-note" value="Nur bei Bedarf nutzen"></td></tr>
-    </tbody>
-  </table>
+  <table><thead><tr><th>&#x2714;</th><th>Artikel</th><th>Da</th><th>Brauche</th><th>Gekauft</th><th>Notizen</th></tr></thead>
+  <tbody>
+    <tr><td><input type="checkbox" data-id="uni-13"></td><td>Spucktücher / Mullwindeln</td><td>?</td><td><span class="badge-need">15 Stk</span></td><td><input class="edit-field edit-small" data-id="uni-13-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-13-note" value="Man hat nie genug! Allrounder."></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-14"></td><td>Halstücher / Dreieckstücher</td><td>?</td><td><span class="badge-need">4 Stk</span></td><td><input class="edit-field edit-small" data-id="uni-14-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-14-note" placeholder="..."></td></tr>
+    <tr><td><input type="checkbox" data-id="uni-15"></td><td>Kratzfäustlinge</td><td>?</td><td><span class="badge-need">1 Paar</span></td><td><input class="edit-field edit-small" data-id="uni-15-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-15-note" value="Nur bei Bedarf nutzen"></td></tr>
+  </tbody></table>
 </div>
 
 <!-- EINKAUFSPRIORITÄTEN -->
@@ -670,8 +480,80 @@
   Baby-Erstausstattung Checkliste &bull; Erstellt März 2026 &bull; Geburtstermin Juli 2026
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
 <script>
-const STORAGE_KEY = 'baby-checkliste-v1';
+// ============================================================
+// FIREBASE CONFIG — wird unten eingetragen
+// ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyAx5QekqGK2-EVxGxF9gnVY0pw0sXQZYTk",
+  authDomain: "baby-checkliste-mc.firebaseapp.com",
+  databaseURL: "https://baby-checkliste-mc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "baby-checkliste-mc",
+  storageBucket: "baby-checkliste-mc.firebasestorage.app",
+  appId: "1:59802397709:web:c0c4c00b1956d00f107944"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+let currentUser = null;
+let dbRef = null;
+let ignoreDbUpdate = false;
+
+// AUTH
+function signIn() {
+  auth.signInWithPopup(provider).catch(err => {
+    document.getElementById('authError').textContent = 'Fehler: ' + err.message;
+  });
+}
+function signOut() { auth.signOut(); }
+
+auth.onAuthStateChanged(user => {
+  currentUser = user;
+  if (user) {
+    document.getElementById('authOverlay').classList.add('hidden');
+    document.getElementById('userBar').style.display = 'flex';
+    document.getElementById('userName').textContent = user.displayName || user.email;
+    document.getElementById('userPhoto').src = user.photoURL || '';
+    startSync();
+  } else {
+    document.getElementById('authOverlay').classList.remove('hidden');
+    document.getElementById('userBar').style.display = 'none';
+    if (dbRef) dbRef.off();
+  }
+});
+
+// SYNC
+function startSync() {
+  dbRef = db.ref('checkliste');
+  dbRef.on('value', snapshot => {
+    const data = snapshot.val();
+    if (data && !ignoreDbUpdate) {
+      applyData(data);
+      if (data.meta && data.meta.saved) {
+        const d = new Date(data.meta.saved);
+        document.getElementById('lastUpdated').textContent =
+          'Zuletzt aktualisiert: ' + d.toLocaleString('de-DE') +
+          (data.meta.savedBy ? ' von ' + data.meta.savedBy : '');
+      }
+    }
+    document.getElementById('syncDot').className = 'sync-dot online';
+    document.getElementById('syncText').textContent = 'Live';
+  });
+  db.ref('.info/connected').on('value', snap => {
+    const dot = document.getElementById('syncDot');
+    const txt = document.getElementById('syncText');
+    if (snap.val()) { dot.className = 'sync-dot online'; txt.textContent = 'Live'; }
+    else { dot.className = 'sync-dot offline'; txt.textContent = 'Offline'; }
+  });
+}
 
 function collectData() {
   const data = {
@@ -680,7 +562,8 @@ function collectData() {
       dob: document.getElementById('baby-dob').value,
       size: document.getElementById('baby-size').value,
       notes: document.getElementById('globalNotes').value,
-      saved: new Date().toISOString()
+      saved: new Date().toISOString(),
+      savedBy: currentUser ? (currentUser.displayName || currentUser.email) : 'unbekannt'
     },
     checks: {},
     fields: {}
@@ -689,11 +572,7 @@ function collectData() {
     data.checks[cb.dataset.id] = cb.checked;
   });
   document.querySelectorAll('input.edit-field[data-id]').forEach(inp => {
-    if (inp.value && inp.value !== inp.defaultValue) {
-      data.fields[inp.dataset.id] = inp.value;
-    } else if (inp.value) {
-      data.fields[inp.dataset.id] = inp.value;
-    }
+    if (inp.value) data.fields[inp.dataset.id] = inp.value;
   });
   return data;
 }
@@ -722,12 +601,16 @@ function applyData(data) {
   updateProgress();
 }
 
-function saveData() {
+function saveToFirebase() {
+  if (!currentUser || !dbRef) return;
   const data = collectData();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  const status = document.getElementById('saveStatus');
-  status.textContent = 'Gespeichert: ' + new Date().toLocaleTimeString('de-DE');
-  setTimeout(() => { status.textContent = ''; }, 3000);
+  ignoreDbUpdate = true;
+  dbRef.set(data).then(() => {
+    ignoreDbUpdate = false;
+    const s = document.getElementById('saveStatus');
+    s.textContent = 'Gespeichert ' + new Date().toLocaleTimeString('de-DE');
+    setTimeout(() => { s.textContent = ''; }, 2000);
+  }).catch(() => { ignoreDbUpdate = false; });
 }
 
 function exportData() {
@@ -741,36 +624,6 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      applyData(data);
-      saveData();
-    } catch (err) {
-      alert('Fehler beim Laden: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-function resetData() {
-  if (!confirm('Wirklich alles zurücksetzen? Alle Häkchen und Notizen werden gelöscht.')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-  document.querySelectorAll('input.edit-field').forEach(inp => inp.value = inp.defaultValue || '');
-  document.getElementById('baby-name').value = '';
-  document.getElementById('baby-dob').value = '';
-  document.getElementById('baby-size').value = '';
-  document.getElementById('globalNotes').value = '';
-  updateAllRows();
-  updateProgress();
-}
-
 function updateAllRows() {
   document.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb => {
     const tr = cb.closest('tr');
@@ -781,59 +634,45 @@ function updateAllRows() {
 function updateProgress() {
   const sections = {};
   let totalChecked = 0, totalItems = 0;
-
   document.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb => {
     const section = cb.closest('[data-section]');
     if (!section) return;
     const key = section.dataset.section;
     if (!sections[key]) sections[key] = { checked: 0, total: 0 };
-    sections[key].total++;
-    totalItems++;
-    if (cb.checked) {
-      sections[key].checked++;
-      totalChecked++;
-    }
+    sections[key].total++; totalItems++;
+    if (cb.checked) { sections[key].checked++; totalChecked++; }
   });
-
   Object.entries(sections).forEach(([key, val]) => {
     const badge = document.querySelector(`[data-progress="${key}"]`);
     if (badge) {
       badge.textContent = val.checked + '/' + val.total;
-      badge.style.background = val.checked === val.total ? '#a5d6a7' : 'rgba(255,255,255,0.7)';
+      badge.style.background = (val.checked === val.total && val.total > 0) ? '#a5d6a7' : 'rgba(255,255,255,0.7)';
     }
   });
-
   const pct = totalItems ? Math.round(totalChecked / totalItems * 100) : 0;
   document.getElementById('totalText').textContent = totalChecked + ' / ' + totalItems + ' erledigt (' + pct + '%)';
   document.getElementById('totalBar').style.width = pct + '%';
 }
 
 // Event listeners
-document.addEventListener('change', function(e) {
+document.addEventListener('change', e => {
   if (e.target.matches('input[type="checkbox"][data-id]')) {
     const tr = e.target.closest('tr');
     if (tr) tr.classList.toggle('checked-row', e.target.checked);
     updateProgress();
-    saveData();
+    saveToFirebase();
   }
 });
 
-document.addEventListener('input', function(e) {
+let _t;
+document.addEventListener('input', e => {
   if (e.target.matches('.edit-field, #baby-name, #baby-dob, #baby-size, #globalNotes')) {
-    clearTimeout(window._autoSaveTimer);
-    window._autoSaveTimer = setTimeout(saveData, 1500);
+    clearTimeout(_t);
+    _t = setTimeout(saveToFirebase, 1500);
   }
 });
 
-// Load on start
-window.addEventListener('DOMContentLoaded', function() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try { applyData(JSON.parse(saved)); } catch(e) {}
-  }
-  updateProgress();
-});
+updateProgress();
 </script>
-
 </body>
 </html>
