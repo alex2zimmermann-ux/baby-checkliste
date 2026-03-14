@@ -81,6 +81,8 @@
     font-family: inherit; transition: transform 0.1s;
   }
   .toolbar button:active { transform: scale(0.97); }
+  .btn-save { background: #c2185b; color: #fff; }
+  .btn-save:hover { background: #a01550; }
   .btn-export { background: #1565c0; color: #fff; }
   .btn-export:hover { background: #0d47a1; }
   .save-status { font-size: 9pt; color: #888; align-self: center; }
@@ -246,6 +248,7 @@
 
 <!-- TOOLBAR -->
 <div class="toolbar no-print">
+  <button class="btn-save" onclick="saveToFirebase()">Speichern</button>
   <button class="btn-export" onclick="exportData()">Backup herunterladen</button>
   <span class="save-status" id="saveStatus"></span>
 </div>
@@ -593,6 +596,7 @@ function addRow(section) {
   tbody.appendChild(tr);
   tr.querySelector(`[data-id="${id}-name"]`).focus();
   updateProgress();
+  saveToFirebase();
 }
 
 function deleteRow(btn) {
