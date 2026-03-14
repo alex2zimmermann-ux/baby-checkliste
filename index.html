@@ -248,7 +248,7 @@
 
 <!-- TOOLBAR -->
 <div class="toolbar no-print">
-  <button class="btn-save" onclick="saveToFirebase()">Speichern</button>
+  <button class="btn-save" onclick="updateInventory()">Update (Einkauf verrechnen)</button>
   <button class="btn-export" onclick="exportData()">Backup herunterladen</button>
   <span class="save-status" id="saveStatus"></span>
 </div>
@@ -710,8 +710,6 @@ function applyData(data) {
 
 function saveToFirebase() {
   if (!currentUser || !dbRef) return;
-  // Process Gekauft → update Da + Brauche
-  processPurchases();
   const data = collectData();
   ignoreDbUpdate = true;
   dbRef.set(data).then(() => {
@@ -719,6 +717,19 @@ function saveToFirebase() {
     const s = document.getElementById('saveStatus');
     s.textContent = 'Gespeichert ' + new Date().toLocaleTimeString('de-DE');
     setTimeout(() => { s.textContent = ''; }, 2000);
+  }).catch(() => { ignoreDbUpdate = false; });
+}
+
+function updateInventory() {
+  if (!currentUser || !dbRef) return;
+  processPurchases();
+  const data = collectData();
+  ignoreDbUpdate = true;
+  dbRef.set(data).then(() => {
+    ignoreDbUpdate = false;
+    const s = document.getElementById('saveStatus');
+    s.textContent = 'Einkauf verrechnet! ' + new Date().toLocaleTimeString('de-DE');
+    setTimeout(() => { s.textContent = ''; }, 3000);
   }).catch(() => { ignoreDbUpdate = false; });
 }
 
