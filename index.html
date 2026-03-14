@@ -632,7 +632,8 @@ function collectData() {
         const da = parseInt(cells[2].textContent.replace(/[^\d]/g, '')) || 0;
         const need = parseInt(cells[3].textContent.replace(/[^\d]/g, '')) || 0;
         const needText = cells[3].textContent.trim();
-        data.inventory[cb.dataset.id] = { da: da, need: need, done: needText === '—' || needText === '\u2014' };
+        const origNeed = parseInt(cells[2].dataset.origNeed || '0') || (da + need);
+        data.inventory[cb.dataset.id] = { da: da, need: need, origNeed: origNeed, done: needText === '—' || needText === '\u2014' };
       }
     }
   });
@@ -692,15 +693,13 @@ function applyData(data) {
       if (!tr) return;
       const cells = tr.querySelectorAll('td');
       if (cells.length < 4) return;
-      if (inv.da > 0) {
-        cells[2].innerHTML = '<span class="badge-ok">' + inv.da + ' &#x2713;</span>';
-      } else {
-        cells[2].textContent = '0';
-      }
+      const origNeed = inv.origNeed || (inv.da + inv.need);
+      cells[2].dataset.origNeed = origNeed;
+      renderDaCell(cells[2], inv.da, origNeed);
       if (inv.done || inv.need <= 0) {
         cells[3].textContent = '\u2014';
       } else {
-        cells[3].innerHTML = '<span class="badge-need">' + inv.need + '</span>';
+        renderNeedCell(cells[3], inv.need);
       }
     });
   }
@@ -733,41 +732,51 @@ function updateInventory() {
   }).catch(() => { ignoreDbUpdate = false; });
 }
 
+function renderDaCell(cell, da, origNeed) {
+  if (da <= 0) { cell.textContent = '0'; return; }
+  const extra = da - origNeed;
+  if (extra > 0) {
+    cell.innerHTML = '<span class="badge-extra">' + da + ' (' + extra + ' extra)</span>';
+  } else if (da >= origNeed && origNeed > 0) {
+    cell.innerHTML = '<span class="badge-ok">' + da + ' &#x2713;</span>';
+  } else {
+    cell.textContent = da;
+  }
+}
+
+function renderNeedCell(cell, need) {
+  if (need > 0) {
+    cell.innerHTML = '<span class="badge-need">' + need + '</span>';
+  } else {
+    cell.textContent = '\u2014';
+  }
+}
+
 function processPurchases() {
   document.querySelectorAll('input.edit-field[data-id$="-bought"]').forEach(inp => {
     const bought = parseInt(inp.value) || 0;
     if (bought <= 0) return;
-    const baseId = inp.dataset.id.replace('-bought', '');
     const tr = inp.closest('tr');
     if (!tr) return;
     const cells = tr.querySelectorAll('td');
     if (cells.length < 4) return;
     const daCell = cells[2];
     const needCell = cells[3];
-    // Parse current Da value
+    // Get current values
     let currentDa = parseInt(daCell.textContent.replace(/[^\d]/g, '')) || 0;
-    // Parse current Brauche value
     let currentNeed = parseInt(needCell.textContent.replace(/[^\d]/g, '')) || 0;
+    // Calculate origNeed (total originally needed = currentDa + currentNeed before this purchase)
+    let origNeed = parseInt(daCell.dataset.origNeed || '0') || (currentDa + currentNeed);
     // Update
     currentDa += bought;
     currentNeed = Math.max(0, currentNeed - bought);
-    // Render Da
-    if (currentDa > 0) {
-      daCell.innerHTML = '<span class="badge-ok">' + currentDa + ' &#x2713;</span>';
-    } else {
-      daCell.textContent = '0';
-    }
-    // Render Brauche
-    if (currentNeed > 0) {
-      needCell.innerHTML = '<span class="badge-need">' + currentNeed + '</span>';
-    } else {
-      needCell.textContent = '—';
-    }
+    // Store origNeed for future reference
+    daCell.dataset.origNeed = origNeed;
+    // Render
+    renderDaCell(daCell, currentDa, origNeed);
+    renderNeedCell(needCell, currentNeed);
     // Reset Gekauft
     inp.value = '';
-    // Store Da/Brauche values as data attributes for Firebase
-    daCell.dataset.val = currentDa;
-    needCell.dataset.val = currentNeed;
   });
 }
 
