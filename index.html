@@ -629,8 +629,8 @@ function collectData() {
     if (tr) {
       const cells = tr.querySelectorAll('td');
       if (cells.length >= 4) {
-        const da = parseInt(cells[2].textContent.replace(/[^\d]/g, '')) || 0;
-        const need = parseInt(cells[3].textContent.replace(/[^\d]/g, '')) || 0;
+        const da = parseInt((cells[2].textContent.match(/\d+/) || ['0'])[0]) || 0;
+        const need = parseInt((cells[3].textContent.match(/\d+/) || ['0'])[0]) || 0;
         const needText = cells[3].textContent.trim();
         const origNeed = parseInt(cells[2].dataset.origNeed || '0') || (da + need);
         data.inventory[cb.dataset.id] = { da: da, need: need, origNeed: origNeed, done: needText === '—' || needText === '\u2014' };
@@ -763,8 +763,8 @@ function processPurchases() {
     const daCell = cells[2];
     const needCell = cells[3];
     // Get current values
-    let currentDa = parseInt(daCell.textContent.replace(/[^\d]/g, '')) || 0;
-    let currentNeed = parseInt(needCell.textContent.replace(/[^\d]/g, '')) || 0;
+    let currentDa = parseInt((daCell.textContent.match(/\d+/) || ['0'])[0]) || 0;
+    let currentNeed = parseInt((needCell.textContent.match(/\d+/) || ['0'])[0]) || 0;
     // Calculate origNeed (total originally needed = currentDa + currentNeed before this purchase)
     let origNeed = parseInt(daCell.dataset.origNeed || '0') || (currentDa + currentNeed);
     // Update
