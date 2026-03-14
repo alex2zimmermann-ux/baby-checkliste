@@ -250,6 +250,8 @@
 <div class="toolbar no-print">
   <button class="btn-save" onclick="updateInventory()">Update (Einkauf verrechnen)</button>
   <button class="btn-export" onclick="exportData()">Backup herunterladen</button>
+  <button style="padding:8px 18px;border:none;border-radius:6px;font-size:10pt;font-weight:600;cursor:pointer;font-family:inherit;background:#2e7d32;color:#fff" onclick="document.getElementById('importFile').click()">Backup laden</button>
+  <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
   <span class="save-status" id="saveStatus"></span>
 </div>
 
@@ -778,6 +780,29 @@ function processPurchases() {
     // Reset Gekauft
     inp.value = '';
   });
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      applyData(data);
+      if (currentUser && dbRef) {
+        const saveData = collectData();
+        dbRef.set(saveData).then(() => {
+          document.getElementById('saveStatus').textContent = 'Import erfolgreich!';
+          setTimeout(() => { document.getElementById('saveStatus').textContent = ''; }, 3000);
+        });
+      }
+    } catch (err) {
+      document.getElementById('saveStatus').textContent = 'Import-Fehler: ' + err.message;
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 function exportData() {
