@@ -169,6 +169,21 @@
   }
   .tip-box strong { color: #f57f17; }
 
+  /* Add row button */
+  .btn-add-row {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 12px; margin: 4px 0 8px 0;
+    background: #fff; border: 1px dashed #c2185b; border-radius: 6px;
+    color: #c2185b; font-size: 9pt; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .btn-add-row:hover { background: #fce4ec; border-style: solid; }
+  .btn-del {
+    background: none; border: none; color: #ccc; cursor: pointer;
+    font-size: 14px; padding: 0 2px; line-height: 1;
+  }
+  .btn-del:hover { color: #c62828; }
+
   .page-break { page-break-before: always; }
   .footer { text-align: center; font-size: 8pt; color: #bbb; padding-top: 10px; border-top: 1px solid #eee; margin-top: 14px; }
 
@@ -260,6 +275,7 @@
     <tr><td><input type="checkbox" data-id="gr56-4"></td><td>Söckchen dünn</td><td>0</td><td><span class="badge-need">3 Paar</span></td><td><input class="edit-field edit-small" data-id="gr56-4-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-4-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="gr56-5"></td><td>Mützchen dünn / Sonnenschutz</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr56-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr56-5-note" placeholder="..."></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('gr56')">+ Hinzufügen</button>
   <div class="tip-box"><strong>Tipp:</strong> Gr. 56 wird nur ~4 Wochen getragen — Second-Hand ideal!</div>
 </div>
 
@@ -285,6 +301,7 @@
     <tr><td><input type="checkbox" data-id="gr62-9"></td><td>Strumpfhosen dünn</td><td>0</td><td><span class="badge-need">2</span></td><td><input class="edit-field edit-small" data-id="gr62-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-9-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="gr62-10"></td><td>Mützchen</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr62-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr62-10-note" placeholder="..."></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('gr62')">+ Hinzufügen</button>
 </div>
 
 <!-- GR. 68 -->
@@ -309,6 +326,7 @@
     <tr><td><input type="checkbox" data-id="gr68-9"></td><td>Strickmütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr68-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-9-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="gr68-10"></td><td>Handschuhe (ohne Daumen)</td><td>0</td><td><span class="badge-need">1 Paar</span></td><td><input class="edit-field edit-small" data-id="gr68-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr68-10-note" placeholder="..."></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('gr68')">+ Hinzufügen</button>
 </div>
 
 <div class="page-break"></div>
@@ -335,6 +353,7 @@
     <tr><td><input type="checkbox" data-id="gr74-9"></td><td>Söckchen dick</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr74-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-9-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="gr74-10"></td><td>Wintermütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr74-10-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr74-10-note" placeholder="..."></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('gr74')">+ Hinzufügen</button>
 </div>
 
 <!-- GR. 80 -->
@@ -358,6 +377,7 @@
     <tr><td><input type="checkbox" data-id="gr80-8"></td><td>Söckchen</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr80-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-8-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="gr80-9"></td><td>Sonnenhut</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr80-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr80-9-note" placeholder="..."></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('gr80')">+ Hinzufügen</button>
 </div>
 
 <!-- GR. 86 -->
@@ -378,6 +398,7 @@
     <tr><td><input type="checkbox" data-id="gr86-5"></td><td>Söckchen dünn</td><td>0</td><td><span class="badge-need">4 Paar</span></td><td><input class="edit-field edit-small" data-id="gr86-5-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-5-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="gr86-6"></td><td>Sonnenhut UV</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr86-6-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr86-6-note" placeholder="..."></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('gr86')">+ Hinzufügen</button>
 </div>
 
 <!-- GR. 92 -->
@@ -401,6 +422,7 @@
     <tr><td><input type="checkbox" data-id="gr92-8"></td><td>Winterjacke</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr92-8-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-8-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="gr92-9"></td><td>Wintermütze</td><td>0</td><td><span class="badge-need">1</span></td><td><input class="edit-field edit-small" data-id="gr92-9-bought" placeholder="0"></td><td><input class="edit-field" data-id="gr92-9-note" placeholder="..."></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('gr92')">+ Hinzufügen</button>
 </div>
 
 <div class="page-break"></div>
@@ -447,6 +469,7 @@
     <tr><td><input type="checkbox" data-id="uni-14"></td><td>Halstücher / Dreieckstücher</td><td>?</td><td><span class="badge-need">4 Stk</span></td><td><input class="edit-field edit-small" data-id="uni-14-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-14-note" placeholder="..."></td></tr>
     <tr><td><input type="checkbox" data-id="uni-15"></td><td>Kratzfäustlinge</td><td>?</td><td><span class="badge-need">1 Paar</span></td><td><input class="edit-field edit-small" data-id="uni-15-bought" placeholder="0"></td><td><input class="edit-field" data-id="uni-15-note" value="Nur bei Bedarf nutzen"></td></tr>
   </tbody></table>
+  <button class="btn-add-row no-print" onclick="addRow('universal')">+ Hinzufügen</button>
 </div>
 
 <!-- EINKAUFSPRIORITÄTEN -->
@@ -555,6 +578,31 @@ function startSync() {
   });
 }
 
+// CUSTOM ROWS
+let customCounter = 0;
+
+function addRow(section) {
+  const sectionEl = document.querySelector(`[data-section="${section}"]`);
+  if (!sectionEl) return;
+  const tbody = sectionEl.querySelector('table:last-of-type tbody');
+  if (!tbody) return;
+  const id = 'custom-' + section + '-' + Date.now() + '-' + (customCounter++);
+  const tr = document.createElement('tr');
+  tr.dataset.customId = id;
+  tr.innerHTML = `<td><input type="checkbox" data-id="${id}"></td><td><input class="edit-field" data-id="${id}-name" placeholder="Kleidungsstück..."></td><td><input class="edit-field edit-small" data-id="${id}-have" placeholder="0"></td><td><input class="edit-field edit-small" data-id="${id}-need" placeholder="0"></td><td><input class="edit-field edit-small" data-id="${id}-bought" placeholder="0"></td><td style="display:flex;align-items:center;gap:4px"><input class="edit-field" data-id="${id}-note" placeholder="..." style="flex:1"><button class="btn-del no-print" onclick="deleteRow(this)" title="Löschen">&#x2716;</button></td>`;
+  tbody.appendChild(tr);
+  tr.querySelector(`[data-id="${id}-name"]`).focus();
+  updateProgress();
+}
+
+function deleteRow(btn) {
+  const tr = btn.closest('tr');
+  if (!tr || !tr.dataset.customId) return;
+  tr.remove();
+  updateProgress();
+  saveToFirebase();
+}
+
 function collectData() {
   const data = {
     meta: {
@@ -566,13 +614,21 @@ function collectData() {
       savedBy: currentUser ? (currentUser.displayName || currentUser.email) : 'unbekannt'
     },
     checks: {},
-    fields: {}
+    fields: {},
+    customRows: {}
   };
   document.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb => {
     data.checks[cb.dataset.id] = cb.checked;
   });
   document.querySelectorAll('input.edit-field[data-id]').forEach(inp => {
     if (inp.value) data.fields[inp.dataset.id] = inp.value;
+  });
+  // Collect custom rows
+  document.querySelectorAll('tr[data-custom-id]').forEach(tr => {
+    const cid = tr.dataset.customId;
+    const section = tr.closest('[data-section]');
+    if (!section) return;
+    data.customRows[cid] = { section: section.dataset.section };
   });
   return data;
 }
@@ -584,6 +640,20 @@ function applyData(data) {
     document.getElementById('baby-dob').value = data.meta.dob || '';
     document.getElementById('baby-size').value = data.meta.size || '';
     document.getElementById('globalNotes').value = data.meta.notes || '';
+  }
+  // Restore custom rows first (remove old ones, add from data)
+  document.querySelectorAll('tr[data-custom-id]').forEach(tr => tr.remove());
+  if (data.customRows) {
+    Object.entries(data.customRows).forEach(([cid, info]) => {
+      const sectionEl = document.querySelector(`[data-section="${info.section}"]`);
+      if (!sectionEl) return;
+      const tbody = sectionEl.querySelector('table:last-of-type tbody');
+      if (!tbody) return;
+      const tr = document.createElement('tr');
+      tr.dataset.customId = cid;
+      tr.innerHTML = `<td><input type="checkbox" data-id="${cid}"></td><td><input class="edit-field" data-id="${cid}-name" placeholder="Kleidungsstück..."></td><td><input class="edit-field edit-small" data-id="${cid}-have" placeholder="0"></td><td><input class="edit-field edit-small" data-id="${cid}-need" placeholder="0"></td><td><input class="edit-field edit-small" data-id="${cid}-bought" placeholder="0"></td><td style="display:flex;align-items:center;gap:4px"><input class="edit-field" data-id="${cid}-note" placeholder="..." style="flex:1"><button class="btn-del no-print" onclick="deleteRow(this)" title="Löschen">&#x2716;</button></td>`;
+      tbody.appendChild(tr);
+    });
   }
   if (data.checks) {
     Object.entries(data.checks).forEach(([id, checked]) => {
